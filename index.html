@@ -328,25 +328,24 @@
     }
 
     function validateAccess() {
-  const input = document.getElementById("password").value.trim();
-  console.log("Input:", input);
-  console.log("PUBLIC_PASSWORD:", PUBLIC_PASSWORD);
-  console.log("ADMIN_PASSWORD:", ADMIN_PASSWORD);
-  if (input === PUBLIC_PASSWORD) {
-    console.log("Kondisi PUBLIC_PASSWORD terpenuhi");
-    document.getElementById("login-section").classList.add("hidden");
-    document.getElementById("message-section").classList.remove("hidden");
-  } else if (input === ADMIN_PASSWORD) {
-    console.log("Kondisi ADMIN_PASSWORD terpenuhi");
-    document.getElementById("login-section").classList.add("hidden");
-    document.getElementById("admin-section").classList.remove("hidden");
-    loadMessagesFromServer();
-  } else {
-    console.log("Kode akses salah!");
-    showNotification("Kode akses salah!", true);
-  }
-}
-
+      const input = document.getElementById("password").value.trim();
+      console.log("Input:", input);
+      console.log("PUBLIC_PASSWORD:", PUBLIC_PASSWORD);
+      console.log("ADMIN_PASSWORD:", ADMIN_PASSWORD);
+      if (input === PUBLIC_PASSWORD) {
+        console.log("Kondisi PUBLIC_PASSWORD terpenuhi");
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("message-section").classList.remove("hidden");
+      } else if (input === ADMIN_PASSWORD) {
+        console.log("Kondisi ADMIN_PASSWORD terpenuhi");
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("admin-section").classList.remove("hidden");
+        loadMessagesFromServer();
+      } else {
+        console.log("Kode akses salah!");
+        showNotification("Kode akses salah!", true);
+      }
+    }
 
     async function sendMessage() {
       const name = document.getElementById("name").value.trim();
@@ -416,3 +415,50 @@
     function openDeleteConfirmation(id) {
       currentDeleteId = id;
       const modal = document.getElementById("modalConfirmSingle");
+      const confirmButton = document.getElementById("confirmDeleteSingleBtn");
+      confirmButton.dataset.id = id;
+      modal.classList.add("show");
+    }
+
+    async function deleteMessage() {
+      const idToDelete = parseInt(document.getElementById("confirmDeleteSingleBtn").dataset.id);
+      if (isNaN(idToDelete)) return;
+
+      try {
+        const response = await fetch(`${API_URL}/messages/${idToDelete}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          showNotification("Pesan berhasil dihapus.");
+          loadMessagesFromServer();
+        } else {
+          const errorText = await response.text();
+          showNotification(`Gagal menghapus pesan: ${errorText}`, true);
+        }
+      } catch (error) {
+        showNotification(`Terjadi kesalahan: ${error}`, true);
+      }
+      closeModal('modalConfirmSingle');
+    }
+
+    function deleteAllMessages() {
+      showNotification("Fitur hapus semua belum diimplementasikan di server.", true);
+    }
+
+    function confirmDeleteAll(choice) {
+      document.getElementById("modalConfirmAll").classList.remove("show");
+      if (choice) {
+        // Implementasikan logika hapus semua jika diperlukan
+      }
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove("show");
+    }
+
+    document.getElementById("confirmDeleteSingleBtn").addEventListener('click', deleteMessage);
+
+  </script>
+</body>
+</html>
