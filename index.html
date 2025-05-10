@@ -328,18 +328,25 @@
     }
 
     function validateAccess() {
-      const input = document.getElementById("password").value.trim();
-      if (input === PUBLIC_PASSWORD) {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("message-section").classList.remove("hidden");
-      } else if (input === ADMIN_PASSWORD) {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("admin-section").classList.remove("hidden");
-        loadMessagesFromServer();
-      } else {
-        showNotification("Kode akses salah!", true);
-      }
-    }
+  const input = document.getElementById("password").value.trim();
+  console.log("Input:", input);
+  console.log("PUBLIC_PASSWORD:", PUBLIC_PASSWORD);
+  console.log("ADMIN_PASSWORD:", ADMIN_PASSWORD);
+  if (input === PUBLIC_PASSWORD) {
+    console.log("Kondisi PUBLIC_PASSWORD terpenuhi");
+    document.getElementById("login-section").classList.add("hidden");
+    document.getElementById("message-section").classList.remove("hidden");
+  } else if (input === ADMIN_PASSWORD) {
+    console.log("Kondisi ADMIN_PASSWORD terpenuhi");
+    document.getElementById("login-section").classList.add("hidden");
+    document.getElementById("admin-section").classList.remove("hidden");
+    loadMessagesFromServer();
+  } else {
+    console.log("Kode akses salah!");
+    showNotification("Kode akses salah!", true);
+  }
+}
+
 
     async function sendMessage() {
       const name = document.getElementById("name").value.trim();
